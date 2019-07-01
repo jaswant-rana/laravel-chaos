@@ -33,8 +33,4 @@ jobs:
       - deploy:
           name: Deploy To Heroku Master
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
                git push heroku master
-            fi         
-     
-
