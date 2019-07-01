@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/larave-chaos
+    working_directory: ~/laravel-chaos
     docker:
       - image: circleci/php:7.3
         environment:
@@ -12,7 +12,7 @@ jobs:
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: postgres
     environment:
-      - CIRCLE_PROJECT_REPONAME: larave-chaos
+      - CIRCLE_PROJECT_REPONAME: laravel-chaos
       - COMMITS_CHECK_ENDPOINT: api/checkReadyToDeploy
       - COMMITS_CHECK_INDICATOR: \"success\":true
     steps:
