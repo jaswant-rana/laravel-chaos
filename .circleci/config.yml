@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/larave-chaos
+    docker:
+      - image: circleci/php:7.3
+        environment:
+        DATABASE_URL: postgres://ubuntu@localhost:5432/postgres
+      - image: postgres:9.6.2
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+    environment:
+      - CIRCLE_PROJECT_REPONAME: larave-chaos
+      - COMMITS_CHECK_ENDPOINT: api/checkReadyToDeploy
+      - COMMITS_CHECK_INDICATOR: \"success\":true
+    steps:
+      - checkout
+      - run:
+          name: Install System Dependencies
+          command: |
+            sudo apt-get update && sudo apt-get -f install && sudo apt-get install wget && sudo apt-get install -y libpng-dev && sudo apt-get install -y libpq-dev
+      - run: 
+          name: Install mbstring & PDO extension
+          command: |
+            sudo docker-php-ext-install gd exif pdo pdo_pgsql pgsql
+      - run: 
+          name: Install Composer
+          command: |
+            sudo composer self-update
+            composer install --prefer-source --no-interaction --dev
+      - run:
+         name: Unit Tests
+         command: |
+           ./vendor/phpunit/phpunit/phpunit
+
